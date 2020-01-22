@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+	.cardId {
+		font-size: 18px;
+	}
+	.cardAction, #clearCards, .betAction, .callAction {
+		width: 100%;
+	}
+	a:link, a:visited {
+		color: darkorange;
+	}
+	
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+var pbpValues = [];
+
+function updatePbpTextArea(pbpList) {
+	var pbp = $("#pbpText");
+
+	pbp.val(pbpList.join("\n"));
+	if(pbp.length)
+       pbp.scrollTop(pbp[0].scrollHeight - pbp.height());
+}
+
+$(document).ready(function(){
+	$(".cardId").click(function(){
+		$("#cards").val($("#cards").val() + " " +  $(this).attr("id"));
+	});
+
+	$("#clearCards").click(function(){
+		$("#cards").val("");
+	});
+
+	$(".cardAction").click(function(){
+		var thisPlay = $(this).text() + ":"+ $("#cards").val();
+		pbpValues.push(thisPlay);
+		updatePbpTextArea(pbpValues);
+		$("#cards").val("");
+	});
+
+	$(".betAction").click(function(){
+		var thisPlay = $(this).text() + ": $" + $("#betAmount").val();
+		pbpValues.push(thisPlay);
+		updatePbpTextArea(pbpValues);
+		$("#betAmount").val("");
+	});
+
+	$(".callAction").click(function(){
+		var thisPlay = $(this).text();
+		pbpValues.push(thisPlay);
+		updatePbpTextArea(pbpValues);
+		$("#betAmount").val("");	
+	});
+
+	$("#undoPbp").click(function(){
+		pbpValues.pop();
+		updatePbpTextArea(pbpValues);
+	});
+
+	$("#clearPbp").click(function(){
+		pbpValues.length = 0;
+		$("#pbpText").val("");
+	});
+	
+	$("#copyPbp").click(function(){
+ 		$("#pbpText").select();
+    	document.execCommand('copy');
+	});
+
+	$("#generateEmail").click(function(){
+		var newLink = encodeURI("mailto:" + $("#emailAddr").val() + "?subject=Poker Hand&body=" + $("#pbpText").val());
+		console.log(newLink);
+		$("#emailLink").attr("href", newLink);
+	});
+});
+</script>
+
+</head> 
+
+<body bgcolor="#35654d">
+
+<table border=0>
+<tr>
+	<td><button class="cardId" id="As" style="color:black">A&spades;</button></td>
+	<td><button class="cardId" id="Ah" style="color:red">A&hearts;</button></td>
+	<td><button class="cardId" id="Ac" style="color:darkgreen">A&clubs;</button></td>
+	<td><button class="cardId" id="Ad" style="color:blue">A&diams;</button></td>
+
+	<td><input readonly size=10 id="cards" style="background-color:silver"></input></td>
+</tr>
+<tr>
+	<td><button class="cardId" id="Ks" style="color:black">K&spades;</button></td>
+	<td><button class="cardId" id="Kh" style="color:red">K&hearts;</button></td>
+	<td><button class="cardId" id="Kc" style="color:darkgreen">K&clubs;</button></td>
+	<td><button class="cardId" id="Kd" style="color:blue">K&diams;</button></td>
+
+	<td><button id="clearCards">Clear</button></td>
+</tr>
+<tr>
+	<td><button class="cardId" id="Qs" style="color:black">Q&spades;</button></td>
+	<td><button class="cardId" id="Qh" style="color:red">Q&hearts;</button></td>
+	<td><button class="cardId" id="Qc" style="color:darkgreen">Q&clubs;</button></td>
+	<td><button class="cardId" id="Qd" style="color:blue">Q&diams;</button></td>
+
+	<td><button class="cardAction" id="myHand">My hand</button></td>
+</tr>
+<tr>
+	<td><button class="cardId" id="Js" style="color:black">J&spades;</button></td>
+	<td><button class="cardId" id="Jh" style="color:red">J&hearts;</button></td>
+	<td><button class="cardId" id="Jc" style="color:darkgreen">J&clubs;</button></td>
+	<td><button class="cardId" id="Jd" style="color:blue">J&diams;</button></td>
+
+	<td><button class="cardAction" id="flop">Flop</button></td>
+</tr>
+<tr>
+	<td><button class="cardId" id="Ts" style="color:black">T&spades;</button></td>
+	<td><button class="cardId" id="Th" style="color:red">T&hearts;</button></td>
+	<td><button class="cardId" id="Tc" style="color:darkgreen">T&clubs;</button></td>
+	<td><button class="cardId" id="Td" style="color:blue">T&diams;</button></td>
+
+	<td><button class="cardAction" id="turn">Turn</button></td>
+</tr>
+<tr>
+	<td><button class="cardId" id="9s" style="color:black">9&spades;</button></td>
+	<td><button class="cardId" id="9h" style="color:red">9&hearts;</button></td>
+	<td><button class="cardId" id="9c" style="color:darkgreen">9&clubs;</button></td>
+	<td><button class="cardId" id="9d" style="color:blue">9&diams;</button></td>
+
+	<td><button class="cardAction" id="river">River</button></td>
+</tr>
+<tr>
+	<td><button class="cardId" id="8s" style="color:black">8&spades;</button></td>
+	<td><button class="cardId" id="8h" style="color:red">8&hearts;</button></td>
+	<td><button class="cardId" id="8c" style="color:darkgreen">8&clubs;</button></td>
+	<td><button class="cardId" id="8d" style="color:blue">8&diams;</button></td>
+
+	<td><button class="cardAction" id="theyShow">They show</button></td>
+</tr>
+<tr>
+	<td><button class="cardId" id="7s" style="color:black">7&spades;</button></td>
+	<td><button class="cardId" id="7h" style="color:red">7&hearts;</button></td>
+	<td><button class="cardId" id="7c" style="color:darkgreen">7&clubs;</button></td>
+	<td><button class="cardId" id="7d" style="color:blue">7&diams;</button></td>
+</tr>
+<tr>
+	<td><button class="cardId" id="6s" style="color:black">6&spades;</button></td>
+	<td><button class="cardId" id="6h" style="color:red">6&hearts;</button></td>
+	<td><button class="cardId" id="6c" style="color:darkgreen">6&clubs;</button></td>
+	<td><button class="cardId" id="6d" style="color:blue">6&diams;</button></td>
+</tr>
+<tr>
+	<td><button class="cardId" id="5s" style="color:black">5&spades;</button></td>
+	<td><button class="cardId" id="5h" style="color:red">5&hearts;</button></td>
+	<td><button class="cardId" id="5c" style="color:darkgreen">5&clubs;</button></td>
+	<td><button class="cardId" id="5d" style="color:blue">5&diams;</button></td>
+</tr>
+<tr>
+	<td><button class="cardId" id="4s" style="color:black">4&spades;</button></td>
+	<td><button class="cardId" id="4h" style="color:red">4&hearts;</button></td>
+	<td><button class="cardId" id="4c" style="color:darkgreen">4&clubs;</button></td>
+	<td><button class="cardId" id="4d" style="color:blue">4&diams;</button></td>
+</tr>
+<tr>
+	<td><button class="cardId" id="3s" style="color:black">3&spades;</button></td>
+	<td><button class="cardId" id="3h" style="color:red">3&hearts;</button></td>
+	<td><button class="cardId" id="3c" style="color:darkgreen">3&clubs;</button></td>
+	<td><button class="cardId" id="3d" style="color:blue">3&diams;</button></td>
+</tr>
+<tr>
+	<td><button class="cardId" id="2s" style="color:black">2&spades;</button></td>
+	<td><button class="cardId" id="2h" style="color:red">2&hearts;</button></td>
+	<td><button class="cardId" id="2c" style="color:darkgreen">2&clubs;</button></td>
+	<td><button class="cardId" id="2d" style="color:blue">2&diams;</button></td>
+</tr>
+</table>
+
+
+<p>
+<table border=0>
+<tr>
+	<td rowspan=2><input id="betAmount" size=4 placeholder="$ Bet" style="text-align:right" pattern="[0-9]*" inputmode="numeric"></input></td>
+	<td><button class="betAction" id="iBet">I bet</button></td>
+	<td><button class="betAction" id="iRaise">I raise</button></td>
+	<td><button class="callAction" id="iCall">I call</button></td>
+	<td><button class="callAction" id="iCheck">I check</button></td>
+	<td><button class="callAction" id="iFold">I fold</button></td>
+</tr>
+<tr>
+	<td><button class="betAction" id="theyBet">They bet</button></td>
+	<td><button class="betAction" id="theyRaise">They raise</button></td>
+	<td><button class="callAction" id="theyCall">They call</button></td>
+	<td><button class="callAction" id="theyCheck">They check</button></td>
+	<td><button class="callAction" id="theyFold">They fold</button></td>
+</tr>
+</table>
+</p>
+
+<p> 
+<textarea readonly rows=6 cols=40 style="background-color:silver" id="pbpText"></textarea> 
+</p>
+
+<button id="undoPbp">Undo</button>
+<button id="clearPbp">Clear</button>
+<button id="copyPbp">Copy</button>
+<br>
+<input id="emailAddr" placeholder="Email" />
+<button id="generateEmail">Generate Email Link</button>
+<a id="emailLink" target="_blank">Send Email</a>
+
+</body>
+
+</html>
